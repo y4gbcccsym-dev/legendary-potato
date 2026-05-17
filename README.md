@@ -4,7 +4,7 @@ This repository contains the `PLXULTIMATEX` PowerShell script.
 
 ## ULTIMATEXPLUS Performance Engine
 
-`PLXULTIMATEX.ps1` version 1.1.14 is a Windows PowerShell 5.1 script that presents the original single Core Mode menu for applying the ULTIMATEXPLUS performance preset with clearer status output and safer step-by-step reporting.
+`PLXULTIMATEX.ps1` version 1.2.0 is a Windows PowerShell 5.1 script that presents the original single Core Mode menu for applying the ULTIMATEXPLUS GOD PVP performance preset with clearer status output and safer step-by-step reporting.
 
 ### What the script does
 
@@ -15,6 +15,8 @@ The preset includes the following optimization actions:
 - Detects CPU and GPU information through CIM/WMI and displays a client/hardware profile.
 - Disables Game DVR capture and background app access.
 - Applies system responsiveness and power-plan tuning for lower latency.
+- Applies GOD PVP network latency tuning for active TCP/IP interfaces.
+- Applies GOD PVP keyboard and mouse input queue tuning.
 - Applies PriorityControl, fullscreen optimization, multimedia scheduler, and mouse input registry settings.
 - Removes the `useplatformclock` BCDEdit value.
 - Applies GPU TDR registry values.
@@ -44,6 +46,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 ### Version history
 
+- `1.2.0`: Adds GOD PVP network latency and input queue tuning inside the existing Core Mode.
 - `1.1.14`: Adds timed step summaries and a JSON run manifest for audit/review after applying the preset.
 - `1.1.13`: Tracks detailed per-step status metadata for clearer troubleshooting.
 - `1.1.12`: Improves summary output with manifest, backup, and transcript paths.

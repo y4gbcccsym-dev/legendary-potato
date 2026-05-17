@@ -10,7 +10,7 @@ chcp 65001 | Out-Null
 # ============================================================
 
 $script:AppName = "ULTIMATEXPLUS"
-$script:AppVersion = "1.1.14"
+$script:AppVersion = "1.2.0"
 $script:AppliedSteps = 0
 $script:FailedSteps = 0
 $script:RunId = Get-Date -Format "yyyyMMdd-HHmmss"
@@ -551,6 +551,46 @@ function Enable-PerformancePowerPlan {
     return (Invoke-NativeCommand -FilePath "powercfg.exe" -Arguments @("/setactive", "SCHEME_MIN"))
 }
 
+function Get-ActiveTcpInterfaceRegistryPaths {
+    $adapterConfigs = Get-CimInstance Win32_NetworkAdapterConfiguration -Filter "IPEnabled = True" -ErrorAction SilentlyContinue
+    $paths = @()
+
+    foreach ($adapterConfig in $adapterConfigs) {
+        if ($adapterConfig.SettingID) {
+            $paths += "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\$($adapterConfig.SettingID)"
+        }
+    }
+
+    return $paths
+}
+
+function Optimize-GodPvpNetworkLatency {
+    $interfacePaths = @(Get-ActiveTcpInterfaceRegistryPaths)
+
+    if ($interfacePaths.Count -eq 0) {
+        Write-Host "        No active TCP/IP interface registry paths were detected." -ForegroundColor DarkYellow
+        return $false
+    }
+
+    $allOk = $true
+    foreach ($interfacePath in $interfacePaths) {
+        $ack = Set-RegistryValueSafe $interfacePath "TcpAckFrequency" "REG_DWORD" "1"
+        $noDelay = Set-RegistryValueSafe $interfacePath "TCPNoDelay" "REG_DWORD" "1"
+        $delAck = Set-RegistryValueSafe $interfacePath "TcpDelAckTicks" "REG_DWORD" "0"
+        $allOk = ($allOk -and $ack -and $noDelay -and $delAck)
+    }
+
+    return $allOk
+}
+
+function Optimize-GodPvpInputQueue {
+    $keyboardPath = "HKLM\SYSTEM\CurrentControlSet\Services\kbdclass\Parameters"
+    $mousePath = "HKLM\SYSTEM\CurrentControlSet\Services\mouclass\Parameters"
+    $keyboard = Set-RegistryValueSafe $keyboardPath "KeyboardDataQueueSize" "REG_DWORD" "20"
+    $mouse = Set-RegistryValueSafe $mousePath "MouseDataQueueSize" "REG_DWORD" "20"
+    return ($keyboard -and $mouse)
+}
+
 function Clear-NvidiaShaderCache {
     if ($GPUType -ne "NVIDIA") { return $true }
 
@@ -642,7 +682,7 @@ function Preset-UltimateXPLUS {
     $script:ManifestPath = $null
     $script:RestoreCheckpointCreated = $false
 
-    Write-Type "[ULTRA] ULTIMATEXPLUS CORE ENGAGED" 5 Magenta
+    Write-Type "[GOD PVP] ULTIMATEXPLUS CORE ENGAGED" 5 Magenta
     Set-AppState "APPLYING"
     Write-Section "APPLYING CORE MODE"
 
@@ -653,6 +693,8 @@ function Preset-UltimateXPLUS {
     Invoke-OptimizationStep "Disable background applications" { Disable-BackgroundApps } | Out-Null
     Invoke-OptimizationStep "Apply system responsiveness profile" { Optimize-SystemResponsiveness } | Out-Null
     Invoke-OptimizationStep "Enable high performance power profile" { Enable-PerformancePowerPlan } | Out-Null
+    Invoke-OptimizationStep "Apply GOD PVP network latency profile" { Optimize-GodPvpNetworkLatency } | Out-Null
+    Invoke-OptimizationStep "Apply GOD PVP input queue profile" { Optimize-GodPvpInputQueue } | Out-Null
     Invoke-OptimizationStep "Apply PriorityControl parameters" { Set-PriorityControl } | Out-Null
     Invoke-OptimizationStep "Apply Plus X fullscreen optimizations" { Disable-FullscreenOptimizations } | Out-Null
     Invoke-OptimizationStep "Optimize MMCSS game task profile" { Optimize-MMCSSTasks } | Out-Null
