@@ -44,6 +44,14 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 4. Note any restore-point warning plus the backup folder, run-log path, and manifest path printed in the summary if you need to review or restore changes.
 5. Reboot Windows after applying the preset.
 
+### Validation
+
+Run the static validation tests from the repository root after editing the script or README:
+
+```bash
+python3 -m unittest discover -s tests
+```
+
 ### Version history
 
 - `1.2.0`: Adds GOD PVP network latency and input queue tuning inside the existing Core Mode.
