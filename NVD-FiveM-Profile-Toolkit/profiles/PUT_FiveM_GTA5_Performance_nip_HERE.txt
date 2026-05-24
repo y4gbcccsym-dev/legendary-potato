@@ -1,0 +1,4 @@
+วางไฟล์จริงชื่อ FiveM_GTA5_Performance.nip ไว้ในโฟลเดอร์ profiles นี้ก่อนใช้งาน
+
+พาธที่ถูกต้อง:
+NVD-FiveM-Profile-Toolkit\profiles\FiveM_GTA5_Performance.nip
