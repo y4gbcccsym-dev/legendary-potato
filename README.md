@@ -1,50 +1,72 @@
-# legendary-potato
+# CornnerPCRescue
 
-## UltimateFPSBoost
+CornnerPCRescue is a WPF + .NET 8 Windows desktop utility for safe PC health checks, Windows maintenance previews, FiveM/GTA V profile review, network diagnostics, backup/restore manifests, and local reports.
 
-This repository contains a cleaned PowerShell version of the UltimateFPSBoost helper at `scripts/UltimateFPSBoost.ps1`.
+The app is intentionally conservative:
 
-The script keeps local hardware detection, smarter discrete-GPU selection, broader shader-cache cleanup, backup/restore support, preview mode, local-only logging, and the Windows performance preset menu while intentionally omitting license checks, client-info collection, webhook logging, and outbound web calls.
+- Preview Mode is the default.
+- Real Apply requires an explicit mode change and a backup-first workflow.
+- It does not disable Defender or Windows Update.
+- It does not delete Prefetch.
+- It does not apply risky BCD, HPET, xAPIC, process mitigation, or realtime-priority tweaks.
+- It does not include KeyAuth, HWID locking, telemetry, webhooks, or external script downloads.
 
-> Warning: applying presets can change Windows registry values, power plans, service startup settings, temp files, and network settings. Review the script before running it, and only run it as Administrator if you trust the tweaks.
+## Build and run
 
-### Run
+Open PowerShell in the repository root first. If your prompt shows a folder such as `C:\Users\12>`, change directory to the real folder that contains `CornnerPCRescue.sln` before running dotnet commands.
 
-Open PowerShell on Windows from the repository root:
+> Do not copy `C:\path\to\legendary-potato` literally. It is a placeholder. Replace it with the actual folder where you downloaded or cloned this repository.
 
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\UltimateFPSBoost.ps1
-```
-
-Preview a preset without writing changes:
-
-```powershell
-.\scripts\UltimateFPSBoost.ps1 -Preset UltimateX -Preview
-```
-
-Run a preset directly without the interactive menu:
+If you do not know where the repository is, search for the solution file first:
 
 ```powershell
-.\scripts\UltimateFPSBoost.ps1 -Preset Balanced
+Get-ChildItem -Path $env:USERPROFILE -Filter CornnerPCRescue.sln -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5 FullName
 ```
 
-Restore the last backup captured before applying tweaks:
+Then change directory to the folder printed above, for example:
 
 ```powershell
-.\scripts\UltimateFPSBoost.ps1 -Preset Restore
+cd C:\Users\12\Downloads\legendary-potato
+dotnet restore .\CornnerPCRescue.sln
+dotnet build .\CornnerPCRescue.sln -c Release
+dotnet test .\CornnerPCRescue.sln -c Release
+dotnet run --project .\src\CornnerPCRescue\CornnerPCRescue.csproj
 ```
 
-### Presets
+Or use a launcher from the repository root:
 
-- **Balanced Preset**: disables Game Bar capture, keeps Game Mode enabled, enables Ultimate Performance, and clears supported GPU plus common DirectX shader caches with Windows/tool availability checks.
-- **Competitive Preset**: adds background app and TCP tuning.
-- **Max FPS Preset**: adds SysMain disablement and user/system temp cleanup.
-- **Ultimate X Mode**: adds low-latency multimedia, advanced TCP, and Nagle-related registry tweaks while skipping system-level changes when Administrator rights are unavailable.
+```powershell
+.\Start-CornnerPCRescue.ps1
+```
 
-### Safety features
+Double-click users can run:
 
-- **Preview mode**: `-Preview` shows intended writes and cache/temp cleanup without changing registry, services, power plans, network settings, or files.
-- **Local backup**: presets save the last registry/service/power/network backup under `%LOCALAPPDATA%\UltimateFPSBoost\backups\last-backup.json` by default.
-- **Local log**: each run writes a local log under `%LOCALAPPDATA%\UltimateFPSBoost\logs` by default.
-- **No outbound calls**: the script does not perform telemetry, webhooks, downloads, or web API calls.
+```text
+Start-CornnerPCRescue.cmd
+```
+
+## Install to Desktop on Windows
+
+From the repository root, run:
+
+```powershell
+.\Install-CornnerPCRescue.ps1
+```
+
+Double-click users can run:
+
+```text
+Install-CornnerPCRescue.cmd
+```
+
+The installer publishes the app to `artifacts\CornnerPCRescue`, creates `CornnerPCRescue.lnk` on your Desktop, and launches the app automatically. Use `-NoLaunch` if you only want to install the shortcut.
+
+The Release executable is produced at:
+
+```text
+src\CornnerPCRescue\bin\Release\net8.0-windows\CornnerPCRescue.exe
+```
+
+## Legacy script
+
+The cleaned legacy PowerShell helper remains at `scripts/UltimateFPSBoost.ps1` for reference and manual use.
