@@ -11,6 +11,17 @@ cd : Cannot find path 'C:\path\to\legendary-potato' because it does not exist.
 
 Those errors mean PowerShell is **not inside the folder that contains this repository**. `C:\path\to\legendary-potato` is only an example placeholder. Do not type it literally.
 
+
+## No-command option
+
+If you are not comfortable typing commands, open the downloaded/extracted repository folder in File Explorer and double-click:
+
+```text
+START_HERE.cmd
+```
+
+The helper checks whether it is next to `CornnerDesktopStudio.sln`, checks for `dotnet`, runs the build, verifies the EXE, and opens the publish folder when successful. Thai instructions are in `START_HERE_TH.md`.
+
 ## Step 1: Get the repository onto your PC
 
 If you do not already have the files, download or clone the repository first.

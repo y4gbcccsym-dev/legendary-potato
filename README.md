@@ -21,6 +21,11 @@ Cornner Desktop Studio is a safe .NET 8 WPF desktop control center for Windows. 
 - No administrator permission is required for normal startup.
 
 
+
+## Easiest option / วิธีง่ายที่สุด
+
+If you are not comfortable with PowerShell commands, open the downloaded/extracted project folder and double-click `START_HERE.cmd`. A Thai step-by-step guide is available in [`START_HERE_TH.md`](START_HERE_TH.md).
+
 ## If PowerShell says the project or build script is missing
 
 You are not in the repository folder yet. `C:\path\to\legendary-potato` in examples is a placeholder, not a real path to type literally. See [`WINDOWS_BUILD_GUIDE.md`](WINDOWS_BUILD_GUIDE.md) for step-by-step download, folder verification, build, publish, and EXE launch instructions.
