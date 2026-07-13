@@ -64,3 +64,17 @@ https://dotnet.microsoft.com/download/dotnet/8.0
 ```
 
 หลังติดตั้งเสร็จ ให้ปิด PowerShell เดิม เปิดใหม่ แล้วดับเบิลคลิก `START_HERE.cmd` อีกครั้ง
+
+
+## ถ้าไม่อยาก Build เองบนเครื่อง
+
+ให้ใช้ GitHub Actions แทน:
+
+1. เปิดหน้า repository บน GitHub
+2. ไปที่แท็บ **Actions**
+3. เลือก workflow **Build Cornner Desktop Studio Windows EXE**
+4. กด Run workflow
+5. เมื่อรันเสร็จ ให้ดาวน์โหลด artifact ชื่อ `CornnerDesktopStudio-win-x64`
+6. แตกไฟล์ artifact แล้วเปิด `CornnerDesktopStudio.exe`
+
+วิธีนี้เหมาะถ้าคุณไม่ถนัดติดตั้ง .NET SDK หรือไม่อยากพิมพ์คำสั่ง build เอง

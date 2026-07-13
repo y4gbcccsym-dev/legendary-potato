@@ -22,6 +22,19 @@ Cornner Desktop Studio is a safe .NET 8 WPF desktop control center for Windows. 
 
 
 
+
+## If you cannot build locally
+
+Use GitHub Actions instead of building on your own PC:
+
+1. Open the repository page on GitHub.
+2. Go to **Actions**.
+3. Run **Build Cornner Desktop Studio Windows EXE**.
+4. Download the `CornnerDesktopStudio-win-x64` artifact after the workflow finishes.
+5. Open `CornnerDesktopStudio.exe` from the downloaded artifact folder.
+
+The workflow builds on `windows-latest`, runs restore/build/test/publish, verifies that `CornnerDesktopStudio.exe` exists, and uploads the whole `publish/win-x64` folder.
+
 ## Easiest option / วิธีง่ายที่สุด
 
 If you are not comfortable with PowerShell commands, open the downloaded/extracted project folder and double-click `START_HERE.cmd`. A Thai step-by-step guide is available in [`START_HERE_TH.md`](START_HERE_TH.md).

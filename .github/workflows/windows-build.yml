@@ -1,0 +1,63 @@
+name: Build Cornner Desktop Studio Windows EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - work
+  pull_request:
+
+jobs:
+  build-test-publish:
+    name: Build, test, and publish win-x64
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Show .NET information
+        run: dotnet --info
+
+      - name: Restore
+        run: dotnet restore .\CornnerDesktopStudio.sln
+
+      - name: Build Release
+        run: dotnet build .\CornnerDesktopStudio.sln -c Release --no-restore
+
+      - name: Test Release
+        run: dotnet test .\CornnerDesktopStudio.sln -c Release --no-build --logger trx --results-directory .\TestResults
+
+      - name: Publish Windows x64 self-contained
+        run: dotnet publish .\src\CornnerDesktopStudio.App\CornnerDesktopStudio.App.csproj -c Release -r win-x64 --self-contained true -o .\publish\win-x64
+
+      - name: Verify EXE exists
+        shell: pwsh
+        run: |
+          $exe = Join-Path $PWD 'publish\win-x64\CornnerDesktopStudio.exe'
+          if (-not (Test-Path $exe)) {
+            throw "Expected EXE was not created: $exe"
+          }
+          Get-Item $exe | Format-List FullName,Length,LastWriteTime
+
+      - name: Upload published EXE folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: CornnerDesktopStudio-win-x64
+          path: publish/win-x64
+          if-no-files-found: error
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CornnerDesktopStudio-test-results
+          path: TestResults
+          if-no-files-found: ignore
